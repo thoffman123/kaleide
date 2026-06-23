@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kaleide — Meditation that listens to your body</title>
+  <meta name="description" content="A biofeedback meditation experience. Your breath shapes the visuals. Your heart sets the pace. Coming soon to iOS." />
+  <meta property="og:title" content="Kaleide" />
+  <meta property="og:description" content="Meditation that listens to your body. Coming soon to iOS." />
+  <meta property="og:image" content="og.png" />
+  <meta name="theme-color" content="#08080f" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #08080f;
+      --fg: #e8e4f0;
+      --muted: rgba(232, 228, 240, 0.45);
+      --accent: #c084fc;
+      --accent2: #818cf8;
+      --glow: rgba(192, 132, 252, 0.18);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── kaleidoscope canvas ── */
+    canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.65;
+      pointer-events: none;
+    }
+
+    /* ── layout ── */
+    .page {
+      position: relative;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+      gap: 2.5rem;
+      text-align: center;
+    }
+
+    /* ── wordmark ── */
+    .wordmark {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .wordmark-name {
+      font-size: clamp(3rem, 10vw, 6rem);
+      font-weight: 200;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #e8d5ff 0%, var(--accent) 45%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .wordmark-tagline {
+      font-size: clamp(0.85rem, 2.5vw, 1.05rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* ── description ── */
+    .description {
+      max-width: 34ch;
+      font-size: clamp(1rem, 2.8vw, 1.2rem);
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .description strong {
+      color: var(--fg);
+      font-weight: 400;
+    }
+
+    /* ── badge ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      border: 1px solid rgba(192, 132, 252, 0.3);
+      border-radius: 999px;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(192, 132, 252, 0.06);
+    }
+
+    .badge svg {
+      flex-shrink: 0;
+    }
+
+    /* ── signup form ── */
+    .signup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .signup-label {
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .signup-row {
+      display: flex;
+      width: 100%;
+      gap: 0;
+      border: 1px solid rgba(232, 228, 240, 0.15);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .signup-row:focus-within {
+      border-color: rgba(192, 132, 252, 0.5);
+      box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.08);
+    }
+
+    .signup-row input[type="email"] {
+      flex: 1;
+      background: rgba(255,255,255,0.04);
+      border: none;
+      outline: none;
+      padding: 0.85rem 1rem;
+      color: var(--fg);
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+
+    .signup-row input[type="email"]::placeholder {
+      color: rgba(232, 228, 240, 0.3);
+    }
+
+    .signup-row button {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      padding: 0 1.25rem;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: inherit;
+      transition: opacity 0.2s;
+    }
+
+    .signup-row button:hover { opacity: 0.85; }
+    .signup-row button:active { opacity: 0.7; }
+
+    .signup-note {
+      font-size: 0.72rem;
+      color: rgba(232, 228, 240, 0.25);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── success state ── */
+    .signup-success {
+      display: none;
+      font-size: 0.9rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── footer ── */
+    footer {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 0; right: 0;
+      text-align: center;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(232, 228, 240, 0.18);
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<div class="page">
+
+  <span class="badge">
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+      <circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/>
+      <circle cx="5" cy="5" r="1.5" fill="currentColor"/>
+    </svg>
+    Coming soon to iOS
+  </span>
+
+  <div class="wordmark">
+    <div class="wordmark-name">Kaleide</div>
+    <div class="wordmark-tagline">Meditation that listens to your body</div>
+  </div>
+
+  <p class="description">
+    Your breath shapes the visuals.<br>
+    Your heart sets the pace.<br><br>
+    <strong>Kaleide</strong> is a biofeedback meditation experience —
+    a living kaleidoscope that responds to you in real time.
+    No scores. No dashboards. Just presence.
+  </p>
+
+  <div class="signup">
+    <div class="signup-label">Get notified at launch</div>
+    <form class="signup-row" id="signupForm"
+          action="https://formspree.io/f/xqevaopr"
+          method="POST">
+      <input type="email" name="email" placeholder="your@email.com" required autocomplete="email" />
+      <button type="submit">Notify me</button>
+    </form>
+    <div class="signup-success" id="signupSuccess">You're on the list.</div>
+    <div class="signup-note">No spam. One email when it's ready.</div>
+  </div>
+
+</div>
+
+<footer>kaleide.app</footer>
+
+<script>
+// ── AJAX form submit ──
+const form = document.getElementById('signupForm');
+const success = document.getElementById('signupSuccess');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const data = new FormData(form);
+  try {
+    const res = await fetch(form.action, {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      form.style.display = 'none';
+      success.style.display = 'block';
+      document.querySelector('.signup-label').style.display = 'none';
+    }
+  } catch (_) {
+    // fallback: let the browser POST normally
+    form.submit();
+  }
+});
+
+// ── Kaleidoscope — ported from app/shaders.py KALEIDOSCOPE_FRAG ──
+(function () {
+  const canvas = document.getElementById('c');
+  const gl = canvas.getContext('webgl2');
+  if (!gl) return; // dark bg is the graceful fallback
+
+  // Mouse shifts the domain warp slightly (matches u_mouse in the app)
+  let mx = 0.5, my = 0.5;
+  window.addEventListener('mousemove', e => {
+    mx = e.clientX / window.innerWidth;
+    my = 1.0 - e.clientY / window.innerHeight;
+  });
+
+  const VERT = `#version 300 es
+    in vec2 a_pos;
+    void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }
+  `;
+
+  const FRAG = `#version 300 es
+    precision highp float;
+
+    uniform float u_time;
+    uniform vec2  u_resolution;
+    uniform vec2  u_mouse;
+
+    out vec4 fragColor;
+
+    #define TAU 6.28318530718
+    #define PI  3.14159265359
+
+    // Cosine palette (Inigo Quilez) — app default, quantumPalette = vec3(0)
+    vec3 palette(float t) {
+      vec3 a = vec3(0.65, 0.55, 0.65);
+      vec3 b = vec3(0.45, 0.45, 0.45);
+      vec3 c = vec3(0.80, 1.00, 1.20);
+      vec3 d = vec3(0.00, 0.25, 0.55);
+      return clamp(a + b * cos(TAU * (c * t + d)), 0.0, 1.0);
+    }
+
+    // Julia set — c = (-0.7, 0.27), smooth iteration coloring
+    float julia(vec2 z) {
+      vec2 c = vec2(-0.70, 0.27);
+      for (int i = 0; i < 40; i++) {
+        z = vec2(z.x*z.x - z.y*z.y + c.x, 2.0*z.x*z.y + c.y);
+        float r2 = dot(z, z);
+        if (r2 > 16.0)
+          return clamp((float(i) + 1.0 - log2(max(log2(sqrt(r2)), 1.0))) / 40.0,
+                       0.0, 1.0);
+      }
+      return 0.0;
+    }
+
+    // Sin-based FBM — matches app (4 octaves; 5 is identical but heavier)
+    float fbm(vec2 p) {
+      float v = 0.0, a = 0.5;
+      vec2 shift = vec2(100.0);
+      for (int i = 0; i < 4; i++) {
+        v += a * (sin(p.x*1.71 + u_time*0.09) * sin(p.y*1.37 + u_time*0.06)
+                + sin(p.x*2.43 - u_time*0.05) * sin(p.y*2.91 + u_time*0.04) * 0.5);
+        p  = p * 2.07 + shift;
+        a *= 0.5;
+      }
+      return v;
+    }
+
+    void main() {
+      // ── Baked session state ──────────────────────────────────────────────
+      // These mimic a live mid-session with the H10 connected.
+      // intensity oscillates slowly; breathe runs at resonance rate (6 br/min).
+      float intensity     = 0.5  + sin(u_time * 0.031) * 0.20;
+      float breathe       = sin(u_time * 0.6283) * 0.5 + 0.5; // 10 s cycle
+      float breatheDepth  = 0.30;
+      float audioReact    = 0.25;
+      float glow          = 0.30;
+      float entropyNorm   = 0.50;
+      float entropyJitter = 0.30;
+      float entropyPhase  = mod(u_time * 0.004, 1.0);
+      float quantumNorm   = 0.40; // → 2 tunnels, 8-fold symmetry
+      float quantumPhase  = 0.30;
+      float warpTurbulence= 1.00;
+      float colorDrift    = 1.00;
+      // ────────────────────────────────────────────────────────────────────
+
+      vec2 uv = (gl_FragCoord.xy - 0.5 * u_resolution) / min(u_resolution.x, u_resolution.y);
+
+      // Breath swell — kaleidoscope zooms in/out with breathing
+      uv *= 1.0 - (breathe - 0.5) * breatheDepth + quantumNorm * 0.02;
+
+      float r     = length(uv);
+      float angle = atan(uv.y, uv.x) + PI;
+
+      // Radial twist
+      angle += r * (quantumNorm - 0.5) * 2.0;
+
+      // Kaleidoscope fold — 8 segments
+      float symmetry = floor(6.0 + quantumNorm*3.0 + entropyNorm*2.0 + 0.5);
+      float segment  = TAU / symmetry;
+      angle = mod(angle, segment);
+      angle = abs(angle - segment * 0.5);
+      vec2 kalUV = vec2(cos(angle), sin(angle)) * r;
+
+      float speed = 0.004 + intensity*0.005 + breathe*0.001;
+
+      // 2 orbiting tunnels (quantumNorm = 0.40 > 0.20)
+      float orbitR     = 0.12 + quantumPhase * 0.08;
+      float orbitSpeed = 0.008 + entropyPhase * 0.006;
+      float spin       = u_time * 0.015;
+
+      vec2 tuv;
+      tuv.x = uv.x + uv.y * ((quantumNorm-0.5) + sin(spin)*0.42);
+      tuv.y = uv.y + uv.x * ((quantumPhase-0.5)*0.8 + sin(spin*0.8+0.9)*0.32);
+      tuv  += vec2(sin(spin*0.5+1.0)*0.06, cos(spin*0.4)*0.05);
+
+      float minDist = 999.0, zoomSum = 0.0;
+      for (int i = 0; i < 2; i++) {
+        float ta    = float(i) * PI + u_time * orbitSpeed;
+        vec2  tc    = vec2(cos(ta), sin(ta)) * orbitR;
+        float tDist = length(tuv - tc);
+        minDist     = min(minDist, tDist);
+        zoomSum    += sin((tDist*PI + u_time*speed)*2.0)*0.5 + 0.5;
+      }
+      float zoomR  = zoomSum * 0.5;
+      // Raise the floor so dark regions don't go nearly-black without the bloom pass
+      float tunnel = max(clamp(mix(0.10/(minDist+0.40), 0.12/(minDist+0.22), glow), 0.0, 1.0), 0.38);
+
+      // Domain-warped FBM — IQ warp chain (same structure as app)
+      vec2 warpUV = kalUV * (1.5 + intensity*0.8)
+                  + (u_mouse - 0.5) * 0.15
+                  + entropyJitter * warpTurbulence * vec2(
+                      sin(u_time*0.73 + entropyPhase*TAU) * 0.08,
+                      cos(u_time*0.61 + entropyPhase*TAU) * 0.08);
+
+      vec2 q  = vec2(fbm(warpUV),
+                     fbm(warpUV + vec2(5.2, 1.3)));
+      vec2 rr = vec2(fbm(warpUV + q + vec2(1.7, 9.2) + u_time*0.12),
+                     fbm(warpUV + q + vec2(8.3, 2.8) + u_time*0.11));
+      float f = fbm(warpUV + rr);
+
+      // Fake surface normal for specular (FBM gradient)
+      float eps = 0.12;
+      vec3 N = normalize(vec3(
+        fbm(warpUV) - fbm(warpUV + vec2(eps, 0.0)),
+        fbm(warpUV) - fbm(warpUV + vec2(0.0, eps)),
+        0.10));
+
+      // Two palette samples + Julia overlay
+      vec3 col = palette(f*0.5 + u_time*0.018 + intensity*0.3
+                         + entropyPhase*0.5*colorDrift + quantumPhase*0.8);
+      col = mix(col, palette(q.x*0.4 + u_time*0.025 + quantumPhase*0.5), 0.35);
+
+      float jv = julia(kalUV * 2.5);
+      col = mix(col, palette(jv*1.5 + entropyPhase + 0.3), jv*0.35*intensity);
+
+      // Specular highlight from rotating light
+      float litAngle = u_time*0.07 + quantumPhase*TAU;
+      vec3  L = normalize(vec3(cos(litAngle)*0.7, sin(litAngle)*0.7, 1.0));
+      float diff = clamp(dot(N, L), 0.0, 1.0);
+      vec3 specCol = mix(vec3(1.0,0.90,0.65), vec3(0.70,0.85,1.0), quantumNorm);
+      float spec   = pow(clamp(dot(reflect(-L,N), vec3(0.0,0.0,1.0)), 0.0, 1.0), 48.0);
+      col = col*(0.45 + 0.55*diff) + specCol*spec*0.15*intensity;
+
+      // Compositing — matches app exactly
+      col  = col*0.75 + 0.28;
+      col *= tunnel*(0.85 + zoomR*0.15);
+      col *= 0.75 + intensity*0.45;
+      col *= 1.0 + audioReact*0.18;
+      col *= 1.0 + (breathe - 0.5)*breatheDepth*0.8;
+      col *= 1.0 - smoothstep(0.55, 1.4, r); // vignette
+
+      // Reinhard tone map — higher exposure to compensate for no bloom pass
+      col *= 2.4;
+      col  = col / (1.0 + col);
+
+      // Fake bloom: extract bright areas and add them back (approximates the
+      // app's bright-pass + Gaussian blur composite)
+      vec3 bloomSample = max(col - 0.38, vec3(0.0));
+      col += bloomSample * 1.6;
+      col  = min(col, vec3(1.0));
+
+      fragColor = vec4(col, 1.0);
+    }
+  `;
+
+  function compile(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS))
+      console.error('Shader compile error:', gl.getShaderInfoLog(s));
+    return s;
+  }
+
+  const prog = gl.createProgram();
+  gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT));
+  gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG));
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS))
+    console.error('Shader link error:', gl.getProgramInfoLog(prog));
+  gl.useProgram(prog);
+
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+  const posLoc = gl.getAttribLocation(prog, 'a_pos');
+  gl.enableVertexAttribArray(posLoc);
+  gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+  const uTime  = gl.getUniformLocation(prog, 'u_time');
+  const uRes   = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  let start = null;
+  function frame(ts) {
+    if (!start) start = ts;
+    const t = (ts - start) / 1000;
+    gl.uniform1f(uTime,  t);
+    gl.uniform2f(uRes,   canvas.width, canvas.height);
+    gl.uniform2f(uMouse, mx, my);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
