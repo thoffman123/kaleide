@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Kaleide</title>
+  <meta name="description" content="Kaleide privacy policy." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #08080f;
+      --fg: #e8e4f0;
+      --muted: rgba(232, 228, 240, 0.55);
+      --accent: #c084fc;
+      --border: rgba(232, 228, 240, 0.1);
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.7;
+    }
+
+    .wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 6rem;
+    }
+
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      margin-bottom: 3rem;
+      opacity: 0.8;
+    }
+    .back:hover { opacity: 1; }
+
+    .site-name {
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.5rem;
+    }
+
+    .updated {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 3rem;
+    }
+
+    .summary {
+      background: rgba(192, 132, 252, 0.07);
+      border: 1px solid rgba(192, 132, 252, 0.2);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 3rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .summary strong { color: var(--fg); }
+
+    h2 {
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 2.5rem 0 0.75rem;
+    }
+
+    p { color: var(--muted); margin-bottom: 1rem; }
+
+    ul {
+      color: var(--muted);
+      padding-left: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    ul li { margin-bottom: 0.4rem; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    footer {
+      margin-top: 4rem;
+      font-size: 0.75rem;
+      color: rgba(232, 228, 240, 0.2);
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="/">← Kaleide</a>
+
+  <div class="site-name">Kaleide</div>
+  <h1>Privacy Policy</h1>
+  <p class="updated">Last updated: June 2026</p>
+
+  <div class="summary">
+    <strong>The short version:</strong> Kaleide does not collect, transmit, or store any data outside your device. Your heart rate, breathing, and session data never leave your phone. There are no accounts, no analytics, and no advertising.
+  </div>
+
+  <h2>What Kaleide collects</h2>
+  <p>When you use Kaleide with a Polar H10 heart rate sensor, the app receives the following data over Bluetooth:</p>
+  <ul>
+    <li>Heart rate (beats per minute)</li>
+    <li>RR intervals (beat-to-beat timing, used to calculate HRV)</li>
+    <li>Breathing waveform and rate</li>
+    <li>Accelerometer readings (used to detect stillness)</li>
+  </ul>
+  <p>This data is processed entirely on your device in real time. It is never transmitted to Kaleide, Apple, or any third party.</p>
+  <p>Kaleide also saves your app settings (session duration, audio levels, visual preferences) locally on your device using iOS standard storage.</p>
+
+  <h2>Session recordings</h2>
+  <p>If you choose to save a session, Kaleide stores a summary (session duration, average heart rate, HRV, and breathing rate) as a local file on your device. You can view past sessions in the app and export them as a CSV file for your own use. This export is a manual action — nothing is uploaded automatically.</p>
+  <p>Deleting the app removes all stored sessions.</p>
+
+  <h2>What Kaleide does not collect</h2>
+  <ul>
+    <li>No account or registration is required</li>
+    <li>No name, email address, or contact information</li>
+    <li>No location data</li>
+    <li>No usage analytics or crash reports</li>
+    <li>No advertising identifiers</li>
+    <li>No data is written to Apple Health or shared with HealthKit</li>
+    <li>No data is stored in iCloud or any cloud service</li>
+  </ul>
+
+  <h2>Third parties</h2>
+  <p>Kaleide does not include any third-party analytics, advertising, or tracking SDKs. The only external communication the app makes is an optional background request to the ANU Quantum Random Number Generator API to seed the visual entropy — this request contains no personal data and returns only random numbers.</p>
+
+  <h2>Bluetooth</h2>
+  <p>Kaleide requests Bluetooth access solely to connect to a Polar H10 heart rate sensor. No other Bluetooth devices are accessed. Bluetooth data is processed locally and is never stored beyond the current session unless you explicitly save the session.</p>
+
+  <h2>Children's privacy</h2>
+  <p>Kaleide is not directed at children under 13 and does not knowingly collect any information from children.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If this policy changes materially, the updated version will be posted at this URL with a new date. Continued use of the app after a change constitutes acceptance of the updated policy.</p>
+
+  <hr class="divider" />
+
+  <h2>Contact</h2>
+  <p>Questions about this policy:<br>
+  <a href="mailto:privacy@kaleide.app">privacy@kaleide.app</a></p>
+
+  <footer>© 2026 Anthony Hoffman. All rights reserved.</footer>
+
+</div>
+</body>
+</html>
