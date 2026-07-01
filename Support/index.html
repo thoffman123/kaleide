@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Support — Kaleide</title>
+  <meta name="description" content="Support and frequently asked questions for Kaleide — Responsive Meditation." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #08080f;
+      --fg: #e8e4f0;
+      --muted: rgba(232, 228, 240, 0.55);
+      --accent: #c084fc;
+      --border: rgba(232, 228, 240, 0.1);
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.7;
+    }
+
+    .wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 6rem;
+    }
+
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      margin-bottom: 3rem;
+      opacity: 0.8;
+    }
+    .back:hover { opacity: 1; }
+
+    .site-name {
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 3rem;
+    }
+
+    .summary {
+      background: rgba(192, 132, 252, 0.07);
+      border: 1px solid rgba(192, 132, 252, 0.2);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 3rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .summary strong { color: var(--fg); }
+
+    h2 {
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 2.5rem 0 0.75rem;
+    }
+
+    h3 {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--fg);
+      margin: 1.75rem 0 0.5rem;
+    }
+
+    p { color: var(--muted); margin-bottom: 1rem; }
+
+    ul {
+      color: var(--muted);
+      padding-left: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    ul li { margin-bottom: 0.4rem; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    .disclaimer {
+      background: rgba(232, 228, 240, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    footer {
+      margin-top: 4rem;
+      font-size: 0.75rem;
+      color: rgba(232, 228, 240, 0.2);
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="/">← Kaleide</a>
+
+  <div class="site-name">Kaleide</div>
+  <h1>Support</h1>
+  <p class="subtitle">Responsive Meditation for iPhone</p>
+
+  <div class="summary">
+    <strong>Kaleide</strong> is a mindfulness app featuring ambient kaleidoscope visuals and generative audio. With an optional compatible Bluetooth heart rate sensor, it responds to your breath and heart rate in real time — no scores, no dashboards, just presence.
+  </div>
+
+  <!-- ── FAQ ───────────────────────────────────────────────────── -->
+
+  <h2>Frequently Asked Questions</h2>
+
+  <h3>What Bluetooth sensors are compatible?</h3>
+  <p>Kaleide works with Bluetooth Low Energy (BLE) chest-strap heart rate monitors that broadcast the standard Bluetooth Heart Rate Profile — these provide the high-quality, beat-to-beat data the app needs for HRV and breathing detection. The app is validated with the <strong>Polar H10</strong>. Other Polar chest straps (H9, H9N) are expected to work.</p>
+  <p>Wrist-worn optical sensors — including Apple Watch — are not supported. They do not provide the RR-interval resolution required for heart rate variability and resonance breathing feedback.</p>
+
+  <h3>How do I pair my sensor?</h3>
+  <p>No pairing in iOS Settings is required. To connect your sensor:</p>
+  <ul>
+    <li>Strap the sensor on and make sure it is moist/in contact with skin — the H10 won't transmit without skin contact.</li>
+    <li>Open Kaleide and tap the sensor icon on the setup screen.</li>
+    <li>The app scans for nearby compatible devices. Tap your sensor's name to connect.</li>
+    <li>Once connected, the icon turns active and biofeedback begins at session start.</li>
+  </ul>
+  <p>If your sensor doesn't appear, try moving it closer to your phone, or power-cycle it by pressing its button.</p>
+
+  <h3>What if the app crashes or stops responding?</h3>
+  <ul>
+    <li>Force-quit the app (swipe it away from the App Switcher) and reopen it.</li>
+    <li>If you were connected to a sensor, disconnect and reconnect it before starting a new session.</li>
+    <li>Make sure iOS is up to date — Kaleide requires iOS 16 or later.</li>
+    <li>If crashes happen consistently, note what you were doing and email us the details (see Contact below) — crash reports help a lot.</li>
+  </ul>
+
+  <h3>How do I export my session data?</h3>
+  <p>After a session completes, Kaleide stores a summary locally on your device (duration, average heart rate, HRV, and breathing rate). To export:</p>
+  <ul>
+    <li>Open the Sessions tab in the app.</li>
+    <li>Tap the session you want to export.</li>
+    <li>Tap <strong>Export</strong> and choose a destination (Files, Mail, AirDrop, etc.).</li>
+    <li>The export is a CSV file for your own records — nothing is uploaded automatically.</li>
+  </ul>
+
+  <h3>The app doesn't seem to be reading my heart rate.</h3>
+  <p>Ensure the sensor strap is snug and the electrodes are moistened — the H10 requires good skin contact. Give it 20–30 seconds after connecting before the signal stabilises. During a session, the small sensor icon in the corner shows live connection status. If it stays inactive, try disconnecting and reconnecting the sensor from the setup screen.</p>
+
+  <h3>Can I use Kaleide without a heart rate sensor?</h3>
+  <p>Yes. A sensor is entirely optional. Without one, Kaleide runs as a standalone mindfulness experience — the kaleidoscope and generative audio still respond to a built-in breathing pacer and entropy-driven visuals. Biofeedback features activate automatically when a compatible sensor is connected.</p>
+
+  <!-- ── Privacy ──────────────────────────────────────────────── -->
+
+  <hr class="divider" />
+
+  <h2>Privacy</h2>
+
+  <p>Kaleide does not collect, transmit, or store any data outside your device. Your heart rate, breathing, and session information never leave your phone. There are no accounts, no analytics, and no advertising identifiers.</p>
+  <ul>
+    <li>No account or sign-in required</li>
+    <li>All sensor data is processed entirely on-device, in real time</li>
+    <li>Sessions are saved locally; export is always a manual action</li>
+    <li>No usage analytics, no crash reporting services, no tracking SDKs</li>
+    <li>No data written to Apple Health or any cloud service</li>
+  </ul>
+  <p>For the full policy, see the <a href="/privacy.html">Privacy Policy</a>.</p>
+
+  <!-- ── Medical disclaimer ───────────────────────────────────── -->
+
+  <hr class="divider" />
+
+  <h2>Medical Disclaimer</h2>
+
+  <div class="disclaimer">
+    Kaleide is not a medical device and is intended for relaxation and general wellbeing only. It is not designed to diagnose, treat, cure, or prevent any medical condition. Heart rate and HRV readings are for informational and mindfulness purposes only and should not be used to make medical decisions. Consult a qualified healthcare provider for any health concerns.
+  </div>
+
+  <!-- ── Contact ──────────────────────────────────────────────── -->
+
+  <hr class="divider" />
+
+  <h2>Contact</h2>
+
+  <p>For questions, bug reports, or anything else:</p>
+  <p><a href="mailto:anthonyhoffman@gmail.com">anthonyhoffman@gmail.com</a></p>
+  <p>We read every message and typically respond within a few days.</p>
+
+  <footer>© 2026 Anthony Hoffman. All rights reserved.</footer>
+
+</div>
+</body>
+</html>
